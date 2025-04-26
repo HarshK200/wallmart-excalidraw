@@ -1,25 +1,28 @@
-import { prisma, userSchema } from "@repo/db";
+import { prisma, userLoginSchema, userSignupSchema } from "@repo/db";
 import express from "express";
-import { hash } from "bcrypt";
+import { compare, hash } from "bcrypt";
+import { sign } from "jsonwebtoken";
 
 export async function signupController(
   req: express.Request,
   res: express.Response,
 ) {
   try {
-    const userParsed = userSchema.safeParse({
+    const userSignupParsed = userSignupSchema.safeParse({
       username: req.body.username,
       email: req.body.email,
       password: req.body.password,
     });
-    if (!userParsed.success) {
-      res.status(422).json({ msg: "Invalid fields", err: userParsed.error });
+    if (!userSignupParsed.success) {
+      res
+        .status(422)
+        .json({ msg: "Invalid fields", err: userSignupParsed.error });
       return;
     }
 
     // check if user exists in db
     const existingUser = await prisma.user.findUnique({
-      where: { email: userParsed.data.email },
+      where: { email: userSignupParsed.data.email },
     });
     if (existingUser) {
       res.status(409).json({ err: "Email already registered" });
@@ -28,9 +31,9 @@ export async function signupController(
 
     const createdUser = await prisma.user.create({
       data: {
-        username: userParsed.data.username,
-        email: userParsed.data.email,
-        passwordHash: await hash(userParsed.data.password, 10),
+        username: userSignupParsed.data.username,
+        email: userSignupParsed.data.email,
+        passwordHash: await hash(userSignupParsed.data.password, 10),
       },
     });
 
@@ -39,9 +42,67 @@ export async function signupController(
       user: { id: createdUser.id, email: createdUser.email },
     });
   } catch (e) {
+    res.status(500).json({ msg: "Internal server error" });
     console.log(`Error occured in signupController\n${e}`);
   }
 }
 
-export function loginController(req: express.Request, res: express.Response) {
+export async function loginController(
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
+    const userLoginParsed = userLoginSchema.safeParse({
+      email: req.body.email,
+      password: req.body.password,
+    });
+    if (!userLoginParsed.success) {
+      res
+        .status(422)
+        .json({ msg: "Invalid fields", err: userLoginParsed.error });
+      return;
+    }
+
+    // check if user exists in db
+    const dbUser = await prisma.user.findUnique({
+      where: { email: userLoginParsed.data.email },
+    });
+    if (!dbUser) {
+      res.status(404).json({ err: "User with email not found" });
+      return;
+    }
+
+    const isPasswordValid = await compare(
+      userLoginParsed.data.password,
+      dbUser.passwordHash,
+    );
+    if (!isPasswordValid) {
+      res.status(401).json({ err: "Invalid password" });
+      return;
+    }
+
+    if (!process.env.JWT_SECRET) {
+      throw new Error("JWT_SECRET is not set in environment variables");
+    }
+
+    // NOTE: ttl is time-to-live i.e. expiry time
+    const jwtToken = sign(
+      { userId: dbUser.id },
+      process.env.JWT_SECRET,
+      { expiresIn: "7h" }, // cookie token lasts for 7hr
+    );
+
+    res
+      .status(200)
+      .cookie("jwt_token", jwtToken, {
+        httpOnly: true, // means cookie is not accessable by javascript on client side
+        // secure: true, // use cookie with HTTPS only requests
+        sameSite: "lax", // to prevent CSRF attacks
+      })
+      .json({ msg: "Login successful" });
+    return;
+  } catch (e) {
+    res.status(500).json({ msg: "Internal server error" });
+    console.log(`Error occured in loginController\n${e}`);
+  }
 }
