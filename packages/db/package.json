@@ -1,12 +1,13 @@
 {
   "name": "@repo/db",
-  "exports": {
-    ".": "./src/index.ts"
-  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --skip-generate",
-    "db:deploy": "prisma migrate deploy"
+    "db:deploy": "prisma migrate deploy",
+    "dev": "tsc -b",
+    "build": "tsc -b"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
