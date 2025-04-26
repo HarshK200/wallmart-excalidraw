@@ -1,7 +1,7 @@
 {
   "name": "@repo/db",
   "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "types": "./src/index.ts",
   "scripts": {
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --skip-generate",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@prisma/client": "6.6.0",
-    "@types/node": "^22.14.0"
+    "@types/node": "^22.14.0",
+    "zod": "^3.24.3"
   }
 }

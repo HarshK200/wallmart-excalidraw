@@ -1,22 +1,16 @@
-import { prisma } from "@repo/db";
 import express from "express";
+import { connectDb, prisma } from "@repo/db";
+import { v1Router } from "./routes/v1Router";
 
 const app = express();
 
-app.get("/", (req, res) => {
-  res.json({ msg: "Hi i'm the root route" });
-});
+// middlewares
+app.use(express.json());
 
-app.get("/db-health", async (req, res) => {
-  try {
-    await prisma.$connect();
-    res.json({ msg: "Successfully connected to the db 🟢" }).status(200);
-  } catch (e) {
-    res.json({ err: "Couldn't connect to db 🔴" }).status(500);
-    console.log("Err:", e);
-  }
-});
+// routes
+app.use("/v1", v1Router);
 
+connectDb();
 app.listen(8080, () => {
   console.log("server running on port 8080");
 });
