@@ -1,6 +1,6 @@
 import express from "express";
 import { connectDb, prisma } from "@repo/db";
-import { v1Router } from "./routes/v1Router";
+import { v1Router } from "./routes";
 
 const app = express();
 

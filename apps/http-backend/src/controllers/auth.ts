@@ -7,15 +7,13 @@ export async function signupController(
   res: express.Response,
 ) {
   try {
-    const { username, email, password } = req.body;
-
     const userParsed = userSchema.safeParse({
-      username,
-      email,
-      password,
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
     });
     if (!userParsed.success) {
-      res.json({ msg: "Invalid fields", err: userParsed.error }).status(422);
+      res.status(422).json({ msg: "Invalid fields", err: userParsed.error });
       return;
     }
 
@@ -24,7 +22,7 @@ export async function signupController(
       where: { email: userParsed.data.email },
     });
     if (existingUser) {
-      res.json({ err: "Email already registered" }).status(409);
+      res.status(409).json({ err: "Email already registered" });
       return;
     }
 
@@ -32,19 +30,18 @@ export async function signupController(
       data: {
         username: userParsed.data.username,
         email: userParsed.data.email,
-        passwordHash: userParsed.data.password,
+        passwordHash: await hash(userParsed.data.password, 10),
       },
     });
 
-    res
-      .json({
-        msg: "User signup successful",
-        user: { id: createdUser.id, email: createdUser.email },
-      })
-      .status(201);
+    res.status(201).json({
+      msg: "User signup successful",
+      user: { id: createdUser.id, email: createdUser.email },
+    });
   } catch (e) {
-    console.log(`Error occured in signupController\nErr:${e}`);
+    console.log(`Error occured in signupController\n${e}`);
   }
 }
 
-export function loginController(req: express.Request, res: express.Response) {}
+export function loginController(req: express.Request, res: express.Response) {
+}

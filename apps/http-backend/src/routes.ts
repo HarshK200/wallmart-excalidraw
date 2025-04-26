@@ -5,9 +5,9 @@ import { createRoomController } from "./controllers/rooms";
 const v1Router: express.Router = express.Router();
 
 // auth routes
-v1Router.get("/signup", signupController);
-v1Router.get("/login", loginController);
+v1Router.post("/signup", signupController);
+v1Router.post("/login", loginController);
 
-v1Router.get("/create-room", createRoomController);
+v1Router.post("/create-room", createRoomController);
 
 export { v1Router };
