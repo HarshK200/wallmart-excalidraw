@@ -1,5 +1,5 @@
 {
-  "name": "wallmart_excalidraw",
+  "name": "wallmart-excalidraw",
   "private": true,
   "scripts": {
     "build": "turbo run build",
