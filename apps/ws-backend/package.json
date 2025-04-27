@@ -2,8 +2,7 @@
   "name": "ws-backend",
   "version": "0.1.0",
   "dependencies": {
-    "@repo/db": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@repo/backend-common": "workspace:*",
     "ws": "^8.18.1"
   },
   "scripts": {
@@ -12,6 +11,7 @@
     "dev": "tsc -b && node dist/index.js"
   },
   "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
     "@types/ws": "^8.18.1"
   }
 }

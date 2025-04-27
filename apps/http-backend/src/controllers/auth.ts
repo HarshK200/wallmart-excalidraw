@@ -1,4 +1,5 @@
-import { prisma, userLoginSchema, userSignupSchema } from "@repo/db";
+import { prisma } from "@repo/db";
+import { userLoginSchema, userSignupSchema } from "@repo/backend-common";
 import express from "express";
 import { compare, hash } from "bcrypt";
 import { sign } from "jsonwebtoken";

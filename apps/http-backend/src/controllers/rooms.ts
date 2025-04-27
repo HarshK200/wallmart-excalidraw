@@ -1,4 +1,5 @@
-import { createRoomSchema, prisma } from "@repo/db";
+import { prisma } from "@repo/db";
+import { createRoomSchema } from "@repo/backend-common";
 import express from "express";
 
 export async function createRoomController(

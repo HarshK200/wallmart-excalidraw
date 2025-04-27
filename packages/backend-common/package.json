@@ -1,0 +1,16 @@
+{
+  "name": "@repo/backend-common",
+  "version": "0.1.0",
+  "main": "dist/index.js",
+  "types": "./src/index.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "tsc -b"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  },
+  "dependencies": {
+    "zod": "^3.24.3"
+  }
+}

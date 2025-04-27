@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "dependencies": {
     "@repo/db": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@repo/backend-common": "workspace:*",
     "bcrypt": "^5.1.1",
     "cookie-parser": "^1.4.7",
     "dotenv": "^16.5.0",
@@ -16,6 +16,7 @@
     "dev": "tsc -b && node ./dist/index.js"
   },
   "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
     "@types/bcrypt": "^5.0.2",
     "@types/cookie-parser": "^1.4.8",
     "@types/dotenv": "^8.2.3",

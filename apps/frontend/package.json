@@ -21,7 +21,6 @@
     "tailwindcss": "^4.1.4"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/node": "^22.14.0",
     "@types/react": "19.1.0",
