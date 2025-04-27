@@ -17,7 +17,7 @@ export async function signupController(
     if (!userSignupParsed.success) {
       res
         .status(422)
-        .json({ msg: "Invalid fields", err: userSignupParsed.error });
+        .json({ msg: "Invalid fields", error: userSignupParsed.error });
       return;
     }
 
@@ -26,7 +26,7 @@ export async function signupController(
       where: { email: userSignupParsed.data.email },
     });
     if (existingUser) {
-      res.status(409).json({ err: "Email already registered" });
+      res.status(409).json({ error: "Email already registered" });
       return;
     }
 
@@ -60,7 +60,7 @@ export async function loginController(
     if (!userLoginParsed.success) {
       res
         .status(422)
-        .json({ msg: "Invalid fields", err: userLoginParsed.error });
+        .json({ msg: "Invalid fields", error: userLoginParsed.error });
       return;
     }
 
@@ -69,7 +69,7 @@ export async function loginController(
       where: { email: userLoginParsed.data.email },
     });
     if (!dbUser) {
-      res.status(404).json({ err: "User with email not found" });
+      res.status(404).json({ error: "User with email not found" });
       return;
     }
 
@@ -78,7 +78,7 @@ export async function loginController(
       dbUser.passwordHash,
     );
     if (!isPasswordValid) {
-      res.status(401).json({ err: "Invalid password" });
+      res.status(401).json({ error: "Invalid password" });
       return;
     }
 

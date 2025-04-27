@@ -14,20 +14,19 @@ export function authMiddleware(
   try {
     const token = req.cookies?.auth;
     if (!token) {
-      res.status(401).json({ err: "Invalid auth token" });
+      res.status(401).json({ error: "Auth token not provided" });
       return;
     }
 
     try {
       const decodedToken = verify(token, JWT_SECRET) as Jwt_Payload;
-      req.body.userId = decodedToken.userId;
-
+      req.userId = decodedToken.userId;
       next();
     } catch (e) {
-      res.status(401).json({ err: e });
+      res.status(401).json({ error: e });
     }
   } catch (e) {
     console.log(e);
-    res.status(500).json({ err: "Internal server error" });
+    res.status(500).json({ error: "Internal server error" });
   }
 }
