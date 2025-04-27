@@ -1,1 +1,16 @@
-console.log("Hi i'm ws-backend")
+import { WebSocketServer } from "ws";
+
+const wss = new WebSocketServer({ port: 8081 });
+
+wss.on("connection", function connection(ws) {
+  ws.on("error", console.error);
+
+  ws.on("message", function message(data) {
+    console.log("received: %s", data);
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(`broadcasting: ${data}`);
+      }
+    });
+  });
+});

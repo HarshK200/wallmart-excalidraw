@@ -23,7 +23,7 @@ export function authMiddleware(
       req.userId = decodedToken.userId;
       next();
     } catch (e) {
-      res.status(401).json({ error: e });
+      res.status(401).json({ error: "Unauthorized" });
     }
   } catch (e) {
     console.log(e);

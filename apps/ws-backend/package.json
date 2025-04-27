@@ -3,11 +3,15 @@
   "version": "0.1.0",
   "dependencies": {
     "@repo/db": "workspace:*",
-    "@repo/typescript-config": "workspace:*"
+    "@repo/typescript-config": "workspace:*",
+    "ws": "^8.18.1"
   },
   "scripts": {
     "build": "tsc -b",
     "start": "node dist/index.js",
     "dev": "tsc -b && node dist/index.js"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.1"
   }
 }
