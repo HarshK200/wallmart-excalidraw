@@ -4,4 +4,5 @@ export function createRoomController(
   req: express.Request,
   res: express.Response,
 ) {
+  res.json({msg: "hi this is create room route"})
 }

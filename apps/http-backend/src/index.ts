@@ -1,20 +1,27 @@
 import express from "express";
-import { connectDb, prisma } from "@repo/db";
+import { connectDb } from "@repo/db";
 import { v1Router } from "./routes";
-import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 
-// loading environment variables
-dotenv.config();
-
+const PORT = 8080;
 const app = express();
 
 // middlewares
 app.use(express.json());
+app.use(cookieParser());
 
 // routes
 app.use("/v1", v1Router);
 
-connectDb();
-app.listen(8080, () => {
-  console.log("server running on port 8080");
-});
+async function main() {
+  try {
+    await connectDb();
+    app.listen(PORT, () => {
+      console.log(`server running on port ${PORT}`);
+    });
+  } catch (e) {
+    console.error(`Error occured in main in index.ts\n${e}`);
+  }
+}
+
+main();

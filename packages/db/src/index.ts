@@ -1,12 +1,11 @@
 import { prisma } from "./client";
 
-function connectDb() {
+async function connectDb() {
   try {
-    prisma.$connect().then(() => {
-      console.log("🟢 Successfully connected to the database");
-    });
+    await prisma.$connect();
+    console.log("🟢 Successfully connected to the database");
   } catch (e) {
-    console.log("🔴 Error connecting to database\nErr: ");
+    throw new Error(`🔴 Error connecting to database\n ${e}`);
   }
 }
 

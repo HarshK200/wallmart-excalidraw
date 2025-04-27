@@ -2,6 +2,7 @@ import { prisma, userLoginSchema, userSignupSchema } from "@repo/db";
 import express from "express";
 import { compare, hash } from "bcrypt";
 import { sign } from "jsonwebtoken";
+import { JWT_SECRET } from "../utils/envVariables";
 
 export async function signupController(
   req: express.Request,
@@ -81,20 +82,16 @@ export async function loginController(
       return;
     }
 
-    if (!process.env.JWT_SECRET) {
-      throw new Error("JWT_SECRET is not set in environment variables");
-    }
-
     // NOTE: ttl is time-to-live i.e. expiry time
     const jwtToken = sign(
       { userId: dbUser.id },
-      process.env.JWT_SECRET,
+      JWT_SECRET,
       { expiresIn: "7h" }, // cookie token lasts for 7hr
     );
 
     res
       .status(200)
-      .cookie("jwt_token", jwtToken, {
+      .cookie("auth", jwtToken, {
         httpOnly: true, // means cookie is not accessable by javascript on client side
         // secure: true, // use cookie with HTTPS only requests
         sameSite: "lax", // to prevent CSRF attacks
