@@ -20,4 +20,24 @@ model User {
     email        String   @unique
     username     String
     passwordHash String
+    Room         Room[]
+    Chat         Chat[]
+}
+
+model Room {
+    id        String   @id @default(uuid())
+    createdAt DateTime @default(now())
+    slug      String   @unique
+    owner     User     @relation(fields: [ownerId], references: [id])
+    ownerId   String
+    chats     Chat[]
+}
+
+model Chat {
+    id      Int     @id @default(autoincrement())
+    room    Room?   @relation(fields: [roomId], references: [id], onDelete: Cascade)
+    roomId  String?
+    user    User    @relation(fields: [userId], references: [id])
+    userId  String
+    message String
 }
