@@ -1,16 +1,9 @@
 import { WebSocketServer } from "ws";
+import { setupConnectionManager } from "./socket/connection";
 
-const wss = new WebSocketServer({ port: 8081 });
+const PORT = 8081;
+const wss = new WebSocketServer({ port: PORT });
 
-wss.on("connection", function connection(ws) {
-  ws.on("error", console.error);
+setupConnectionManager(wss);
 
-  ws.on("message", function message(data) {
-    console.log("received: %s", data);
-    wss.clients.forEach((client) => {
-      if (client.readyState === WebSocket.OPEN) {
-        client.send(`broadcasting: ${data}`);
-      }
-    });
-  });
-});
+console.log(`Websocket server started on PORT ${PORT}`);

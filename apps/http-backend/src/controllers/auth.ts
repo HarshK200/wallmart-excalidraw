@@ -94,7 +94,7 @@ export async function loginController(
       .status(200)
       .cookie("auth", jwtToken, {
         httpOnly: true, // means cookie is not accessable by javascript on client side
-        // secure: true, // use cookie with HTTPS only requests
+        secure: process.env.ENVIRONMENT === "production", // use cookie with HTTPS only requests
         sameSite: "lax", // to prevent CSRF attacks
       })
       .json({ msg: "Login successful" });

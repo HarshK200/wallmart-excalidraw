@@ -9,7 +9,7 @@ export async function createRoomController(
   try {
     const roomDataParsed = createRoomSchema.safeParse({
       ownerId: req.userId,
-      slug: req.body?.slug,
+      name: req.body?.name,
     });
     if (!roomDataParsed.success) {
       res
@@ -20,7 +20,7 @@ export async function createRoomController(
 
     // checking if room already exists
     const existingRoom = await prisma.room.findUnique({
-      where: { slug: roomDataParsed.data.slug },
+      where: { name: roomDataParsed.data.name },
     });
     if (existingRoom) {
       res.status(411).json({ error: "Room with same name already exists" });
