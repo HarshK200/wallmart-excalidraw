@@ -1,10 +1,7 @@
 import express from "express";
 import { verify } from "jsonwebtoken";
 import { JWT_SECRET } from "../utils/envVariables";
-
-interface Jwt_Payload {
-  userId: string;
-}
+import { AuthJwtPayload } from "@repo/backend-common";
 
 export function authMiddleware(
   req: express.Request,
@@ -19,7 +16,7 @@ export function authMiddleware(
     }
 
     try {
-      const decodedToken = verify(token, JWT_SECRET) as Jwt_Payload;
+      const decodedToken = verify(token, JWT_SECRET) as AuthJwtPayload;
       req.userId = decodedToken.userId;
       next();
     } catch (e) {

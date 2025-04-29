@@ -1,5 +1,5 @@
 import { RawData, WebSocket } from "ws";
-import { SocketMessage } from "./socket/types";
+import { SocketMessage } from "../socket/types";
 
 export function isObject(variable: any) {
   return (
@@ -25,6 +25,7 @@ export async function parseRawMessage(data: RawData) {
   }
 }
 
+// Throws an error if json object cannot be parsed
 export function sendJsonMessage(socket: WebSocket, message: SocketMessage) {
   try {
     const jsonStr = JSON.stringify(message);
