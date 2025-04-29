@@ -36,3 +36,36 @@ export async function createRoomController(
     console.log(`Error occured in createRoomController\n\n${e}`);
   }
 }
+
+export async function getRoomController(
+  req: express.Request,
+  res: express.Response,
+) {
+  try {
+    const roomName = req.params.roomName;
+    if (!roomName) {
+      res.status(422).json({ error: "Invalid room name" });
+      return;
+    }
+
+    const room = await prisma.room.findFirst({
+      where: {
+        name: roomName,
+        ownerId: req.userId,
+      },
+    });
+
+    if (!room) {
+      res.status(404).json({
+        error:
+          "Room not found, Current user doesn't have a room with provided name",
+      });
+      return;
+    }
+
+    res.status(200).json({ roomId: room.id });
+  } catch (e) {
+    res.status(500).json({ error: "Internal server error" });
+    console.log(`Error occured in getRoomController\n\n${e}`);
+  }
+}
