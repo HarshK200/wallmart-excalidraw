@@ -27,8 +27,8 @@ model User {
 model Room {
     id        String   @id @default(uuid())
     createdAt DateTime @default(now())
-    name      String   @unique
-    owner     User     @relation(fields: [ownerId], references: [id])
+    name      String
+    owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
     ownerId   String
     chats     Chat[]
 }
