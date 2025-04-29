@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/controllers/onMessageHandler.ts","./src/socket/connection.ts"],"version":"5.8.2"}
+{"root":["./src/index.ts","./src/utils.ts","./src/controllers/messageControllers.ts","./src/socket/connection.ts","./src/socket/router.ts","./src/socket/types.ts"],"version":"5.8.2"}
